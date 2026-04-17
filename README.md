@@ -43,3 +43,5 @@ dane przechowywane są w postacji JSON, koszt biletu jest przechowyany w groszac
 
 client na początku wczytuje stan kasy z pliku ```cash.txt``` jest to prosta tablica przechowywjąca liczbę monet z danego nominału, nominały są w kolejności [5zł, 2zł, 1zł, 50gr, 20gr, 10gr] na przykład:
 ```[0, 1, 3, 5, 0, 3]``` 
+
+w folderze data znajdują się przykładowe dane.

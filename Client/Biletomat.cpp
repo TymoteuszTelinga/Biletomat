@@ -10,16 +10,25 @@ BiletomatCli::BiletomatCli()
     m_Cli = std::make_unique<httplib::Client>("localhost", 8080);
     m_SSEClient = std::make_unique< httplib::sse::SSEClient>(*m_Cli.get(), "/events?client_id=" + m_MachineID);
 
+    m_Tickets.clear();
     auto res = m_Cli->Get("/tickets");
-    nlohmann::json data = nlohmann::json::parse(res->body);
-    m_Tickets = data;
+    if (res && res->status == 200)
+    {
+        nlohmann::json data = nlohmann::json::parse(res->body);
+        m_Tickets = data;
+    }
+    else
+    {
+        std::cout << "Canot get Ticket list\n";
+    }
 
     //config SSE
     //Timeout
     m_SSEClient->on_event("TicketTimeout", [this](const httplib::sse::SSEMessage& msg) {
         m_BookedID = -1;
         //error call
-        m_Callback("Booking Expired");
+        if(m_Callback)
+            m_Callback("Booking Expired");
         });
 
     //Other booking
@@ -85,10 +94,14 @@ bool BiletomatCli::BookTicket(uint32_t ticketID)
         }
         else
         {
+            if (m_Callback)
+                m_Callback("Ticket Booking Error");
             m_BookedID = -1;
             return false;
         }
     }
+    if (m_Callback)
+        m_Callback("Ticket Booking Error");
     m_BookedID = -1;
     return false;
 }
@@ -114,6 +127,8 @@ bool BiletomatCli::ConfirmOrder(const std::string& name, const std::string& surn
         return true;
     }
 
+    if (m_Callback)
+        m_Callback("Ticket Confirmation Error");
     m_BookedID = -1;
     return false;
 }

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Server.h"
-
 #include <thread>
 #include <vector>;
 #include <mutex>
 #include <functional>
+
+#include "ServerStructs.h"
 
 class TimeoutManager
 {

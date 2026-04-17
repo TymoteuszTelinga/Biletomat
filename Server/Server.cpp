@@ -68,7 +68,7 @@ TicketServer::~TicketServer()
 
 void TicketServer::LoadData(const std::filesystem::path& dataPath)
 {
-    std::ifstream file("tickets.txt");
+    std::ifstream file(dataPath);
     if (file.is_open())
     {
         nlohmann::json data;
@@ -86,6 +86,12 @@ void TicketServer::Run()
     m_TimeoutManager.Start(5);
     std::cout << "Server running on http://localhost:8080\n";
     m_Svr.listen("localhost", 8080);
+}
+
+void TicketServer::Stop()
+{
+    m_TimeoutManager.Stop();
+    m_Svr.stop();
 }
 
 void TicketServer::OnEvents(const httplib::Request& req, httplib::Response& res)
@@ -125,7 +131,7 @@ void TicketServer::OnGetTickets(const httplib::Request& req, httplib::Response& 
 void TicketServer::OnBook(const httplib::Request& req, httplib::Response& res)
 {
     ClientRequest request = nlohmann::json::parse(req.body);
-    std::cout << request.ClientID << "Want to book" << request.TicketID << std::endl;
+    //std::cout << request.ClientID << "Want to book" << request.TicketID << std::endl;
 
     uint32_t responseID = -1;
     auto it = m_AvailableTickets.find(request.TicketID);
@@ -173,6 +179,29 @@ void TicketServer::OnCancel(const httplib::Request& req, httplib::Response& res)
 void TicketServer::OnConfirm(const httplib::Request& req, httplib::Response& res)
 {
     BookingData data = nlohmann::json::parse(req.body);
+    auto it = m_BookedTickets.find(data.ClientID);
+    if (it == m_BookedTickets.end())
+    {
+        ServerResponse response;
+        response.Status = 1;
+        response.Massage = "Clinent Booking not egzist";
+        nlohmann::json json = response;
+        res.set_content(json.dump(), "application/json");
+        return;
+    }
+
+    if (it->second.TicketID != data.TicketID)
+    {
+        ServerResponse response;
+        response.Status = 2;
+        response.Massage = "Clinent booked difrent ticket";
+        nlohmann::json json = response;
+        res.set_content(json.dump(), "application/json");
+        return;
+    }
+
+    //if ticket was booked remove booking
+    RemoveBooking(data.ClientID);
     //update purchase history
     {
         History soldTicket;
@@ -182,11 +211,12 @@ void TicketServer::OnConfirm(const httplib::Request& req, httplib::Response& res
         soldTicket.ClientID = data.ClientID;
         m_SoldTickets.push_back(soldTicket);
     }
-    //if ticket was booked remove booking
-    RemoveBooking(data.ClientID);
-
     //DisplayServerState(AvailableTickets, BookedTickets);
-    res.set_content(req.body, "application/json");//dummy/potencly to remove
+    ServerResponse response;
+    response.Status = 0;
+    response.Massage = "Sucess";
+    nlohmann::json json = response;
+    res.set_content(json.dump(), "application/json");
 }
 
 void TicketServer::RemoveBooking(const std::string& clientID)

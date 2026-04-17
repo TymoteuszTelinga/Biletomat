@@ -123,8 +123,18 @@ bool BiletomatCli::ConfirmOrder(const std::string& name, const std::string& surn
     auto r = m_Cli->Post("/confirm", requestJson.dump(), "application/json");
     if (r && r->status == 200)
     {
-        m_BookedID = -1;
-        return true;
+        ServerResponse response = nlohmann::json::parse(r->body);
+        if (response.Status == 0)
+        {
+            m_BookedID = -1;
+            return true;
+        }
+        else
+        {
+            if (m_Callback)
+                m_Callback(response.Massage);
+            return false;
+        }
     }
 
     if (m_Callback)

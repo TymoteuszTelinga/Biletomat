@@ -38,3 +38,11 @@ struct TicketData
 };
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(TicketData, Count, Cost, Name);
+
+struct ServerResponse
+{
+	uint32_t Status;
+	std::string Massage;
+};
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ServerResponse, Status, Massage);

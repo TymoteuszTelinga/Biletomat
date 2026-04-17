@@ -21,6 +21,7 @@ public:
 
     void LoadData(const std::filesystem::path& dataPath);
     void Run();
+    void Stop();
 
 private:
 

@@ -6,13 +6,6 @@ system składający się z serwera i klienta umorzliwający rezerwację i zakup 
 cmake,
 conan
 
-## budowa:
-```
-conan install . --output-folder=out/build/conan --build=missing -s build_type=Release
-cmake build
-```
-program został stworzony na platformie windows, inne platformy nie były testowane
-
 ## urzytkowanie
 
 w celu poprawnej inicjalizacji danych po stronie serwera i klienta pliki tickets.txt i cash.txt muszą znajdowac się w tej samej lokaliacji co pliki wykonywalne serwera i klienta. klient jak i serwer komunikaja się na adresie localhost:8080

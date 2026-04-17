@@ -1,7 +1,7 @@
 ﻿# CMakeList.txt: projekt CMake dla elementu Biletomat, dołącz źródło i zdefiniuj
 # tutaj logikę specyficzną dla projektu.
 #
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.15)
 
 # Włącz przeładowywanie kodu XAML na gorąco dla kompilatorów MSVC, jeśli jest to obsługiwane.
 if (POLICY CMP0141)
@@ -15,7 +15,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-find_package(spdlog REQUIRED)
 find_package(httplib REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(raylib REQUIRED)
@@ -31,7 +30,6 @@ target_compile_definitions(Biletomat PRIVATE
     NOUSER
 )
 
-target_link_libraries(Biletomat spdlog::spdlog)
 target_link_libraries(Biletomat httplib::httplib)
 target_link_libraries(Biletomat nlohmann_json::nlohmann_json)
 target_link_libraries(Biletomat raylib)
@@ -39,7 +37,6 @@ target_link_libraries(Biletomat raylib)
 
 # ── TCP Server ───────────────────────────────────────────────────────────────
 add_executable (server "Server/server.cpp" "Common/StructDefiicions.h" "Server/BroadcastHub.h" "Server/BroadcastHub.cpp" "Server/TimeoutManager.h" "Server/TimeoutManager.cpp" "Server/Server.h" "Server/main.cpp" "Server/ServerStructs.h")
-target_link_libraries(server spdlog::spdlog)
 target_link_libraries(server httplib::httplib)
 target_link_libraries(server nlohmann_json::nlohmann_json)
 

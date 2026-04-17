@@ -9,7 +9,8 @@ conan
 ## budowa:
 ```
 conan install . --output-folder=out/build/conan --build=missing -s build_type=Release
-cmake build
+cmake -S . -B out/build -DCMAKE_TOOLCHAIN_FILE=out/build/conan/build/generators/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build out/build --config Release
 ```
 program został stworzony na platformie windows, inne platformy nie były testowane
 

@@ -36,7 +36,10 @@ void TimeoutManager::Start(uint32_t interval)
 void TimeoutManager::Stop()
 {
 	m_Running = false;
-	m_Worker.join();
+	if (m_Worker.joinable())
+	{
+		m_Worker.join();
+	}
 }
 
 void TimeoutManager::SetCallback(const ExpiredCallbackFn& callback)
@@ -51,7 +54,7 @@ void TimeoutManager::SetTimeout(float timeoutDuration)
 
 void TimeoutManager::CheckExpiredBooking()
 {
-	std::cout << "CheckRun\n";
+	//std::cout << "CheckRun\n";
 	std::vector<std::string> expiredBookings;
 	auto now = std::chrono::steady_clock::now();
 	{

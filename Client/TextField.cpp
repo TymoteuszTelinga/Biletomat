@@ -1,7 +1,6 @@
 
 #include "TextField.h"
 
-#include <spdlog/spdlog.h>
 #include <rlgl.h>
 #include <raymath.h>
 

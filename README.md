@@ -6,6 +6,14 @@ system składający się z serwera i klienta umorzliwający rezerwację i zakup 
 cmake,
 conan
 
+## budowa:
+```
+conan install . --output-folder=out/build/conan --build=missing -s build_type=Release
+cmake -S . -B out/build -DCMAKE_TOOLCHAIN_FILE=out/build/conan/build/generators/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build out/build --config Release
+```
+program został stworzony na platformie windows, inne platformy nie były testowane
+
 ## urzytkowanie
 
 w celu poprawnej inicjalizacji danych po stronie serwera i klienta pliki tickets.txt i cash.txt muszą znajdowac się w tej samej lokaliacji co pliki wykonywalne serwera i klienta. klient jak i serwer komunikaja się na adresie localhost:8080
@@ -36,3 +44,5 @@ dane przechowywane są w postacji JSON, koszt biletu jest przechowyany w groszac
 
 client na początku wczytuje stan kasy z pliku ```cash.txt``` jest to prosta tablica przechowywjąca liczbę monet z danego nominału, nominały są w kolejności [5zł, 2zł, 1zł, 50gr, 20gr, 10gr] na przykład:
 ```[0, 1, 3, 5, 0, 3]``` 
+
+w folderze data znajdują się przykładowe dane.

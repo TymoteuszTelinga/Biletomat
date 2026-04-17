@@ -1,0 +1,42 @@
+[
+  [
+    0,
+    {
+      "Cost": 170,
+      "Count": 8,
+      "Name": "Ulgowy"
+    }
+  ],
+  [
+    1,
+    {
+      "Cost": 270,
+      "Count": 3,
+      "Name": "Stundencki"
+    }
+  ],
+  [
+    2,
+    {
+      "Cost": 370,
+      "Count": 2,
+      "Name": "Senior"
+    }
+  ],
+  [
+    3,
+    {
+      "Cost": 470,
+      "Count": 5,
+      "Name": "Normalny"
+    }
+  ],
+  [
+    10,
+    {
+      "Cost": 570,
+      "Count": 5,
+      "Name": "Specialny"
+    }
+  ]
+]
